@@ -44,71 +44,73 @@ class _MenuState extends State<Menu> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                MenuItem(
-                  isActive: whichBtn == 0 ? true : false,
-                  title: 'Home',
-                  onTapCallBack: () {
-                    print('Home');
-                    setState(() {
-                      whichBtn = 0;
-                    });
-                    Get.toNamed('/');
-                  },
-                ),
-                //MenuItem() for the HomeScreen()
-                MenuItem(
-                    isActive: whichBtn == 1 ? true : false,
-                    title: 'Scan now',
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  MenuItem(
+                    isActive: whichBtn == 0 ? true : false,
+                    title: 'Home',
                     onTapCallBack: () {
-                      print('About us');
+                      print('Home');
                       setState(() {
-                        whichBtn = 1;
+                        whichBtn = 0;
                       });
-                      Get.toNamed('/Scan');
-                    }),
-                MenuItem(
-                    isActive: whichBtn == 2 ? true : false,
-                    title: 'Manage stock',
-                    onTapCallBack: () {
-                      print('Contact us');
-                      setState(() {
-                        whichBtn = 2;
-                      });
-                      Get.toNamed('/ManageStock');
-                    }),
-              ],
+                      Get.toNamed('/');
+                    },
+                  ),
+                  //MenuItem() for the HomeScreen()
+                  MenuItem(
+                      isActive: whichBtn == 1 ? true : false,
+                      title: 'Scan now',
+                      onTapCallBack: () {
+                        print('About us');
+                        setState(() {
+                          whichBtn = 1;
+                        });
+                        Get.toNamed('/Scan');
+                      }),
+                  MenuItem(
+                      isActive: whichBtn == 2 ? true : false,
+                      title: 'Manage stock',
+                      onTapCallBack: () {
+                        print('Contact us');
+                        setState(() {
+                          whichBtn = 2;
+                        });
+                        Get.toNamed('/ManageStock');
+                      }),
+                ],
+              ),
             ),
-            Row(
-              children: [
-                //MenuItem() for the LoginScreen()
-                MenuItem(
-                  isActive: whichBtn == 4 ? true : false,
-                  title: 'Login',
-                  onTapCallBack: () {
-                    print('SignIn');
-                    setState(() {
-                      whichBtn = 4;
-                    });
-                    Get.toNamed('/Login');
-                  },
-                ),
-                //MenuItem() for the RegisterScreen()
-                MenuItem(
-                  isActive: whichBtn == 5 ? true : false,
-                  title: 'Register',
-                  onTapCallBack: () {
-                    print('Register');
-                    setState(() {
-                      whichBtn = 5;
-                    });
-                    Get.toNamed('/Register');
-                  },
-                )
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     //MenuItem() for the LoginScreen()
+            //     MenuItem(
+            //       isActive: whichBtn == 4 ? true : false,
+            //       title: 'Login',
+            //       onTapCallBack: () {
+            //         print('SignIn');
+            //         setState(() {
+            //           whichBtn = 4;
+            //         });
+            //         Get.toNamed('/Login');
+            //       },
+            //     ),
+            //     //MenuItem() for the RegisterScreen()
+            //     MenuItem(
+            //       isActive: whichBtn == 5 ? true : false,
+            //       title: 'Register',
+            //       onTapCallBack: () {
+            //         print('Register');
+            //         setState(() {
+            //           whichBtn = 5;
+            //         });
+            //         Get.toNamed('/Register');
+            //       },
+            //     )
+            //   ],
+            // ),
           ],
         ),
       ),
