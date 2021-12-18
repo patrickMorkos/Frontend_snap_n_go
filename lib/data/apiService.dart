@@ -5,6 +5,8 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:snap_n_go/core/constants/IP.dart';
 
+final endpoint = 'https://world.openfoodfacts.org/api/v2';
+
 Future<String> getTwilioToken(String roomName, String userEmail) async {
   final response = await http
       .post(
@@ -87,4 +89,22 @@ Future<StreamedResponse> upload(List<int> file) async {
   request.fields.putIfAbsent('type', () => 'file');
   var response = await request.send();
   return response;
+}
+
+Future<dynamic> getProduct(String filter, String value) async {
+
+  final String url = '$endpoint/search/$filter=$value';
+  print('url: $url');
+  final uri = Uri.parse(url);
+  final dynamic response = await http.get(uri, headers: <String, String>{
+    "Content-Encoding": "gzip",
+    "content-type": "application/json; charset=UTF-8",
+  }).catchError((error) {
+    debugPrint("------------- ERROR -------------");
+    debugPrint(error.toString());
+  });
+  if (response.statusCode == 200) {
+    print(response.body);
+    return jsonDecode(response.body);
+  }
 }
