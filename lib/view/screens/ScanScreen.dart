@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/domain/controllers/OpenFoodController.dart';
 import 'package:snap_n_go/view/widgets/BarcodeScanner/barcodeScanner.dart';
@@ -59,50 +58,9 @@ class _ScanScreen extends State<ScanScreen> {
     );
   }
 
-  Widget fadeAlertAnimation(
-    BuildContext context,
-    Animation<double> animation,
-    Animation<double> secondaryAnimation,
-    Widget child,
-  ) {
-    return Align(
-      child: FadeTransition(
-        opacity: animation,
-        child: child,
-      ),
-    );
-  }
 
-  customAlert(context, title, desc, type, animationType, textColor) {
-    var alertStyle = AlertStyle(
-        animationType: AnimationType.fromTop,
-        isCloseButton: true,
-        isOverlayTapDismiss: true,
-        descStyle: TextStyle(fontWeight: FontWeight.bold),
-        animationDuration: Duration(milliseconds: 400),
-        alertBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          side: BorderSide(
-            color: Colors.grey,
-          ),
-        ),
-        titleStyle: TextStyle(
-          color: textColor,
-        ),
-        // constraints: BoxConstraints.expand(width: 300),
-        //First to chars "55" represents transparency of color
-        overlayColor: Color(0x55000000),
-        alertElevation: 0,
-        alertAlignment: Alignment.topCenter);
-    Alert(
-      context: context,
-      type: type,
-      style: alertStyle,
-      title: title,
-      desc: desc,
-      alertAnimation: fadeAlertAnimation,
-    ).show();
-  }
+
+
 
   Widget _ProductCard(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

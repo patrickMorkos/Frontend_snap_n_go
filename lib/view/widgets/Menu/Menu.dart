@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:snap_n_go/core/utils/Authentication.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/view/widgets/Menu/MenuItem.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///This widget class is responsible of the menu
 ///or in other words it is the AppBar() of our web app
@@ -23,14 +25,22 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   //This Variable to check which button from the menu is clicked
   int whichBtn = -1;
+  late SharedPreferences prefs;
 
   //This is the iniState() Function to trigger when the Menu() widget is rendered
   @override
   void initState() {
     super.initState();
-    setState(() {
+    setState(() async {
       whichBtn = widget.isActive;
+      prefs = await SharedPreferences.getInstance();
     });
+  }
+
+  bool isAuthenticated() {
+    bool isLogged = false;
+    isLoggedIn().then((value) => isLogged = value);
+    return isLogged;
   }
 
   ///This is the build function of the MenuItem() widget class
@@ -60,57 +70,76 @@ class _MenuState extends State<Menu> {
                     },
                   ),
                   //MenuItem() for the HomeScreen()
-                  MenuItem(
-                      isActive: whichBtn == 1 ? true : false,
-                      title: 'Scan now',
-                      onTapCallBack: () {
-                        print('About us');
-                        setState(() {
-                          whichBtn = 1;
-                        });
-                        Get.toNamed('/Scan');
-                      }),
-                  MenuItem(
-                      isActive: whichBtn == 2 ? true : false,
-                      title: 'Manage stock',
-                      onTapCallBack: () {
-                        print('Contact us');
-                        setState(() {
-                          whichBtn = 2;
-                        });
-                        Get.toNamed('/ManageStock');
-                      }),
+                  isMobileDevice()
+                      ? MenuItem(
+                          isActive: whichBtn == 1 ? true : false,
+                          title: 'Scan now',
+                          onTapCallBack: () {
+                            print('About us');
+                            setState(() {
+                              whichBtn = 1;
+                            });
+                            Get.toNamed('/Scan');
+                          })
+                      : Container(),
+
+                  isAuthenticated()
+                      ? MenuItem(
+                          isActive: whichBtn == 2 ? true : false,
+                          title: 'Manage stock',
+                          onTapCallBack: () {
+                            print('Manage stock');
+                            setState(() {
+                              whichBtn = 2;
+                            });
+                            Get.toNamed('/ManageStock');
+                          })
+                      : Container(),
                 ],
               ),
             ),
-            // Row(
-            //   children: [
-            //     //MenuItem() for the LoginScreen()
-            //     MenuItem(
-            //       isActive: whichBtn == 4 ? true : false,
-            //       title: 'Login',
-            //       onTapCallBack: () {
-            //         print('SignIn');
-            //         setState(() {
-            //           whichBtn = 4;
-            //         });
-            //         Get.toNamed('/Login');
-            //       },
-            //     ),
-            //     //MenuItem() for the RegisterScreen()
-            //     MenuItem(
-            //       isActive: whichBtn == 5 ? true : false,
-            //       title: 'Register',
-            //       onTapCallBack: () {
-            //         print('Register');
-            //         setState(() {
-            //           whichBtn = 5;
-            //         });
-            //         Get.toNamed('/Register');
-            //       },
-            //     )
-            //   ],
-            // ),
+            InkWell(
+              child: !isAuthenticated()
+                  ? TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 15,
+                          backgroundImage:
+                              imageUrl != null ? NetworkImage(imageUrl!) : null,
+                          child: imageUrl == null
+                              ? Icon(Icons.account_circle, size: 30)
+                              : Container(),
+                        ),
+                        Text(
+                          name!,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            signOut();
+                          },
+                          child: Text(
+                            'Logout',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
           ],
         ),
       ),

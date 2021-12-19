@@ -11,7 +11,7 @@ class Stock {
   final List<dynamic> products;
   final List<dynamic> stockProducts;
   Stock({
-    required this.id,
+    this.id,
     required this.name,
     required this.address,
     required this.products,

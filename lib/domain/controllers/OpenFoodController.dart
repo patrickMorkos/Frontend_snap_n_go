@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/data/apiService.dart';
-import 'package:snap_n_go/domain/entities/LogedUser.dart';
+import 'package:snap_n_go/domain/entities/LoggedUser.dart';
 
 class OpenFoodController extends GetxController {
   dynamic productInformation = {}.obs;

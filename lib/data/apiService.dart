@@ -5,8 +5,8 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:snap_n_go/core/constants/IP.dart';
 
-final endpoint = 'https://world.openfoodfacts.org/api/v2';
-
+final externalEndpoint = 'https://world.openfoodfacts.org/api/v2';
+final internalEndpoint = 'https://' + getIP() + ':44346/api';
 Future<String> getTwilioToken(String roomName, String userEmail) async {
   final response = await http
       .post(
@@ -36,7 +36,7 @@ Future<String> getTwilioToken(String roomName, String userEmail) async {
 // to http://quickeyIP/rest/entities/entityNameToSave
 Future<dynamic> genericPost(String entityName, dynamic body) async {
   // getting the correct path to call
-  final String url = getIP() + 'rest/entities/$entityName';
+  final String url = internalEndpoint + '/$entityName';
   // making the api call
   final dynamic response = await http
       .post(Uri.parse(url),
@@ -52,15 +52,9 @@ Future<dynamic> genericPost(String entityName, dynamic body) async {
   return response;
 }
 
-// generic get request that takes the entity name to list
-// and access token and make a get request
-// to http://quickeyIP/rest/entities/entityNameToget/all
-Future<dynamic> genericGet(String entityName) async {
-  // print('token in service--> $token');
-  // getting the correct path to call
-  final String url = getIP() + 'rest/entities/$entityName/all';
-  // print('url in service--> $url');
-  // making the api call
+// generic get request that takes the entity name
+Future<dynamic> genericGet(String entityName, String filter) async {
+  final String url = internalEndpoint + '/$entityName/$filter';
   final dynamic response =
       await http.get(Uri.parse(url), headers: <String, String>{
     "Content-Encoding": "gzip",
@@ -69,9 +63,6 @@ Future<dynamic> genericGet(String entityName) async {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());
   });
-
-  // print("RESPONSE IS = ${jsonDecode(response.body)}");
-
   return jsonDecode(response.body);
 }
 
@@ -92,8 +83,7 @@ Future<StreamedResponse> upload(List<int> file) async {
 }
 
 Future<dynamic> getProduct(String filter, String value) async {
-
-  final String url = '$endpoint/search/$filter=$value';
+  final String url = '$externalEndpoint/search/$filter=$value';
   print('url: $url');
   final uri = Uri.parse(url);
   final dynamic response = await http.get(uri, headers: <String, String>{
@@ -107,4 +97,20 @@ Future<dynamic> getProduct(String filter, String value) async {
     print(response.body);
     return jsonDecode(response.body);
   }
+}
+
+Future<void> logout() async {
+  final String url = '$internalEndpoint/Auth/logout';
+  final uri = Uri.parse(url);
+  final dynamic response = await http.post(
+    Uri.parse(url),
+    headers: <String, String>{
+      "Content-Encoding": "gzip",
+      "content-type": "application/json; charset=UTF-8",
+    },
+  ).catchError((error) {
+    debugPrint("------------- ERROR -------------");
+    debugPrint(error.toString());
+  });
+  return response;
 }
