@@ -6,6 +6,7 @@ import 'package:snap_n_go/data/apiService.dart';
 import 'package:snap_n_go/domain/controllers/LoginController.dart';
 import 'package:snap_n_go/domain/controllers/StockController.dart';
 import 'package:snap_n_go/domain/models/Stock.dart';
+import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/CardsList/CardsList.dart';
 import 'package:snap_n_go/view/widgets/CustomButton/CustomButton.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
@@ -34,17 +35,17 @@ class _ManageStock extends State<ManageStock> {
     super.initState();
     var tmp;
     Future.delayed(Duration.zero, () async {
-      await genericGet('Stock', 'all');
+      // await genericGet('Stock', 'all');
+      tmp = await stockController
+          .getStocksByUserId(loginController.userInfo['id'])
+          .forEach((i) {
+        tmp.add(Stock.fromJson(i));
+      });
     }).then((value) => {
-          tmp = stockController
-              .getStocksByUserId(loginController.userInfo['id'])
-              .forEach((i) {
-            tmp.add(Stock.fromJson(i));
+          setState(() {
+            stocks = tmp ?? [];
           })
-        });
-    setState(() {
-      stocks = tmp;
-    });
+        }).then((value) => print('stocks: $stocks'));
   }
 
   //This Function of type widget returns the whole body of the ManageStock
@@ -217,13 +218,12 @@ class _ManageStock extends State<ManageStock> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // appBar: CustomAppBar(),
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [
-          Menu(
-            isActive: whichBtn,
-          ),
-          _ManageStockBody(context)
+        children: [CustomAppBar(), 
+        
+        // _ManageStockBody(context)
         ],
       ),
     );

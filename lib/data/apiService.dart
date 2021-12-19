@@ -6,7 +6,7 @@ import 'package:http_parser/http_parser.dart';
 import 'package:snap_n_go/core/constants/IP.dart';
 
 final externalEndpoint = 'https://world.openfoodfacts.org/api/v2';
-final internalEndpoint = 'https://' + getIP() + ':44346/api';
+final internalEndpoint = getIP() + 'api';
 Future<String> getTwilioToken(String roomName, String userEmail) async {
   final response = await http
       .post(
@@ -55,10 +55,11 @@ Future<dynamic> genericPost(String entityName, dynamic body) async {
 // generic get request that takes the entity name
 Future<dynamic> genericGet(String entityName, String filter) async {
   final String url = internalEndpoint + '/$entityName/$filter';
+  print('url: $url');
   final dynamic response =
       await http.get(Uri.parse(url), headers: <String, String>{
     "Content-Encoding": "gzip",
-    // "content-type": "application/json; charset=UTF-8",
+    "content-type": "application/json; charset=UTF-8",
   }).catchError((error) {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());

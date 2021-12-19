@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
+import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
 ///This widget class is responsible of the HomeScreen() content
@@ -51,9 +52,7 @@ class _HomeScreen extends State<HomeScreen> {
       backgroundColor: Colors.orange.shade50,
       body: ListView(
         children: [
-          // Menu(
-          //   isActive: whichBtn,
-          // ),
+          CustomAppBar(),
           _HomeBody(context)
         ],
       ),

@@ -8,5 +8,6 @@ import 'package:snap_n_go/domain/controllers/LoginController.dart';
 
 Future isLoggedIn() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('auth', true);
   return prefs.getBool('auth')??false;
 }

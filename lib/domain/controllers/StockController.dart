@@ -26,8 +26,10 @@ class StockController extends GetxController {
   }
 
   getStocksByUserId(dynamic userId) async {
-    dynamic res = await genericGet("Address", "/user/$userId");
+    // dynamic res = await genericGet("Stock", "/user/$userId");
+    dynamic res = await genericGet("Stock", "user/3");
     List data = res;
+    print('data $data');
     if (data.length == 0) stocks = [];
     for (var item in data) {
       stocks.add(item);

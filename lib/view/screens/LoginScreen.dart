@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
+import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/Auth/LoginForm.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -136,12 +137,7 @@ class _LoginScreen extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [
-          Menu(
-            isActive: whichBtn,
-          ),
-          _LoginBody(context)
-        ],
+        children: [CustomAppBar(), _LoginBody(context)],
       ),
     );
   }

@@ -13,17 +13,13 @@ class Navigation {
     // Main route and Home Page
     GetPage(name: '/', page: () => HomeScreen()),
     //Login screen route
-    GetPage(name: '/Login', page: () =>   LoginScreen()),
+    GetPage(name: '/Login', page: () => LoginScreen()),
     //Register screen route
     GetPage(name: '/Register', page: () => RegisterScreen()),
     //Scan screen route
     GetPage(name: '/Scan', page: () => ScanScreen()),
     //ManageStock screen route
-    GetPage(name: '/ManageStock', page: (){
-      bool isLogged=false;
-      isLoggedIn().then((value) => isLogged=value);
-      return isLogged? ManageStock():LoginScreen();
-    }),
+    GetPage(name: '/ManageStock', page: () => ManageStock()),
   ];
 
   List<GetPage<dynamic>> getNavigationList() {

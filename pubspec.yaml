@@ -44,6 +44,7 @@ dependencies:
   openfoodfacts: ^1.7.0
   flutter_barcode_sdk: ^1.2.2
   shared_preferences: ^2.0.11
+  carousel_slider: ^4.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
