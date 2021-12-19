@@ -19,12 +19,17 @@ class _CardListState extends State<CardList> {
       padding: EdgeInsets.all(10.0),
       child: SingleChildScrollView(
         controller: controller,
-        child: Column(children: [
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
           Text(widget.title, style: Theme.of(context).textTheme.headline6),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.items.length,
-              itemBuilder: (context, index) {
+         Container(
+           child: widget.items.length>0
+      ? ListView.builder(
+        shrinkWrap: true,
+          itemCount: widget.items.length,
+          itemBuilder: (BuildContext context, int index) {
+            // print('itemm-> ${widget.items[index]}');
                 return Card(
                   child: ListTile(
                     title: Text(widget.items[index]['name']),
@@ -36,9 +41,10 @@ class _CardListState extends State<CardList> {
                     ),
                   ),
                 );
-              },
-            ),
-          ),
+          },
+        )
+      : const Center(child: Text('No items')),
+         ),
         ]),
       ),
     );

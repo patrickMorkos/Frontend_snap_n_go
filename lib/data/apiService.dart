@@ -37,6 +37,7 @@ Future<String> getTwilioToken(String roomName, String userEmail) async {
 Future<dynamic> genericPost(String entityName, dynamic body) async {
   // getting the correct path to call
   final String url = internalEndpoint + '/$entityName';
+  print('url is $url');
   // making the api call
   final dynamic response = await http
       .post(Uri.parse(url),
@@ -49,23 +50,30 @@ Future<dynamic> genericPost(String entityName, dynamic body) async {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());
   });
-  return response;
+  print('resppp ${jsonDecode(response.body)}');
+  return jsonDecode(response.body);
 }
 
 // generic get request that takes the entity name
 Future<dynamic> genericGet(String entityName, String filter) async {
   final String url = internalEndpoint + '/$entityName/$filter';
-  print('url: $url');
-  final dynamic response =
-      await http.get(Uri.parse(url), headers: <String, String>{
-    "Content-Encoding": "gzip",
-    "content-type": "application/json; charset=UTF-8",
-  }).catchError((error) {
-    debugPrint("------------- ERROR -------------");
-    debugPrint(error.toString());
+  var response = await http.get(Uri.parse(url)).catchError((error) {
+    print('------------- ERROR -------------');
+    print(error.toString());
   });
+  // print('respp ${jsonDecode(response.body)}');
   return jsonDecode(response.body);
 }
+// print('url: $url');
+// final dynamic response =
+//     await http.get(Uri.parse(url), headers: <String, String>{
+//   "Content-Encoding": "gzip",
+//   "content-type": "application/json; charset=UTF-8",
+// }).catchError((error) {
+//   debugPrint("------------- ERROR -------------");
+//   debugPrint(error.toString());
+// });
+// return jsonDecode(response.body);
 
 // method that uploads a file to the backend, returns a StreamedResponse
 Future<StreamedResponse> upload(List<int> file) async {
@@ -85,20 +93,37 @@ Future<StreamedResponse> upload(List<int> file) async {
 
 Future<dynamic> getProduct(String filter, String value) async {
   final String url = '$externalEndpoint/search/$filter=$value';
-  print('url: $url');
-  final uri = Uri.parse(url);
-  final dynamic response = await http.get(uri, headers: <String, String>{
-    "Content-Encoding": "gzip",
-    "content-type": "application/json; charset=UTF-8",
-  }).catchError((error) {
-    debugPrint("------------- ERROR -------------");
-    debugPrint(error.toString());
+  var response = await http.get(Uri.parse(url)).catchError((error) {
+    print('------------- ERROR -------------');
+    print(error.toString());
   });
   if (response.statusCode == 200) {
-    print(response.body);
     return jsonDecode(response.body);
+  } else {
+    return null;
   }
 }
+// print('url: $url');
+// final uri = Uri.parse(url);
+// final dynamic response = await http.get(uri, headers: <String, String>{
+//   "Content-Encoding": "gzip",
+//   // "content-type": "application/json; charset=UTF-8",
+// }).catchError((error) {
+//   debugPrint("------------- ERROR -------------");
+//   debugPrint(error.toString());
+// });
+// if (response.statusCode == 200) {
+//   print(response.body);
+//   return jsonDecode(response.body);
+// }
+
+// Await the http get response, then decode the json-formatted response.
+// var response = await http.get(Uri.parse(url));
+// print('response--> $response');
+// if (response.statusCode == 200) {
+// } else {
+//   print('not okk');
+// }
 
 Future<void> logout() async {
   final String url = '$internalEndpoint/Auth/logout';

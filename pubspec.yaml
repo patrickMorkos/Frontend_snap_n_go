@@ -45,6 +45,8 @@ dependencies:
   flutter_barcode_sdk: ^1.2.2
   shared_preferences: ^2.0.11
   carousel_slider: ^4.0.0
+  http: ^0.13.4
+  file_picker: ^4.3.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

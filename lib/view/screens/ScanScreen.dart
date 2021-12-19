@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/domain/controllers/OpenFoodController.dart';
+import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/BarcodeScanner/barcodeScanner.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -58,14 +59,11 @@ class _ScanScreen extends State<ScanScreen> {
     );
   }
 
-
-
-
-
   Widget _ProductCard(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     print('ready?? ${foodController.isReady.value}');
+    print('info: ${foodController.productInformation['product_name']}');
     return Obx(() => foodController.scanMode.isTrue
         ? (foodController.isReady.isTrue &&
                 foodController.productInformation['product_name'] != null)
@@ -107,11 +105,14 @@ class _ScanScreen extends State<ScanScreen> {
                           margin: EdgeInsets.only(top: 0.03 * height),
                           height: 0.2 * height,
                           // width: 0.3*width,
-                          child: Image.network(foodController
-                                  .productInformation!['selected_images']![
-                              'front']!['display']!['fr'],fit: BoxFit.cover,errorBuilder: (context,Object,StackTrace){
-                                return Text('Unable to load Image');
-                              },),
+                          child: Image.network(
+                            foodController.productInformation![
+                                'selected_images']!['front']!['display']!['fr'],
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, Object, StackTrace) {
+                              return Text('Unable to load Image');
+                            },
+                          ),
                         ),
                         Container(
                           // margin:EdgeInsets.only(top:0.2*height),
@@ -153,7 +154,8 @@ class _ScanScreen extends State<ScanScreen> {
               )
         : Container(
             margin: EdgeInsets.only(top: 0.1 * height),
-            child: Text('Press On Scan Barcode To Start Scanning',
+            child: isMobileDevice()? Text('Press On Scan Barcode To Start Scanning',
+                style: TextStyle(fontWeight: FontWeight.bold)):Text('Search for any product name',
                 style: TextStyle(fontWeight: FontWeight.bold))));
     // return foodController.isReady.isTrue?
   }
@@ -178,9 +180,22 @@ class _ScanScreen extends State<ScanScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    isMobileDevice()? Container(
                         margin: EdgeInsets.only(left: width * 0.2),
-                        child: Barcode()),
+                        child: Barcode()):Container(),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0),
+                      child: TextField(
+                        onChanged: (value) {
+                          if (value.length >= 3) {
+                            Future.delayed(Duration(milliseconds: 3000),
+                                () async {
+                              await foodController.getProductInfoByName(value);
+                            });
+                          }
+                        },
+                      ),
+                    ),
                     _ProductCard(context),
                   ],
                 ),
@@ -191,19 +206,13 @@ class _ScanScreen extends State<ScanScreen> {
       ],
     );
   }
-
   ///This is the build function of the MenuItem() widget class
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [
-          Menu(
-            isActive: whichBtn,
-          ),
-          _ScanBody(context)
-        ],
+        children: [CustomAppBar(), _ScanBody(context)],
       ),
     );
   }

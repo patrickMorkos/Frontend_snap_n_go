@@ -8,7 +8,7 @@ class OpenFoodController extends GetxController {
   dynamic productInformation = {}.obs;
   dynamic barcode = 'Unknown barcode'.obs;
   var isReady = false.obs;
-  var scanMode=false.obs;
+  var scanMode = false.obs;
   void setBarcode(String code) {
     barcode = code;
     print('Detected barcode: $barcode');
@@ -23,53 +23,55 @@ class OpenFoodController extends GetxController {
       isReady.value = true;
     } else
       isReady.value == false;
-      print('ready switched to ${isReady.value}');
+    print('ready switched to ${isReady.value}');
   }
 
-  void toggleScanMode(){
-        if (scanMode.value == false) {
+  void toggleScanMode() {
+    if (scanMode.value == false) {
       scanMode.value = true;
-    } else
-      scanMode.value == false;
+    } else {
+      scanMode.value = false;
       print('ready switched to ${scanMode.value}');
+    }
   }
 
   void setProductInfo(dynamic info) {
     productInformation = info;
+    print('Product info: $productInformation');
   }
 
-  dynamic getProductInfoByBarcode() async{
-    var response = await getProduct('code', barcode);
-      print('response---> $response');
-      toggleReady();
-      List products=response['products'];
-      print('found match-> $products');
-      if(products.length >0)
-      setProductInfo(products[0]);
-      //to access product name--> product_name
-      //to access product nutriments--> nutriments
+  dynamic getProductInfoByBarcode() async {
+    var response = await getProduct('code', '8024884117809');
+    print('response---> $response');
+    toggleReady();
+    List products = response['products'];
+    print('found match-> $products');
+    if (products.length > 0) setProductInfo(products[0]);
+    //to access product name--> product_name
+    //to access product nutriments--> nutriments
   }
 
-  dynamic getProductInfoByName(String productName) {
-    var product = getProduct('product_name', productName);
-    if (product != null) {
-      return product;
-    } else {
-      print('No Product Found.');
+  dynamic getProductInfoByName(String productName) async {
+    var response = await getProduct('product_name', productName);
+    // print('response---> $response');
+    toggleReady();
+    List products = response['products'];
+    print('found match-> $products');
+    if (products.length > 0) setProductInfo(products[0]);
+  }
+
+  void addNewProduct(code, name) async {
+    // define the product to be added.
+    // more attributes available ...
+    Product myProduct = Product(
+      barcode: code,
+      productName: name,
+    );
+    // query the OpenFoodFacts API
+    Status result = await OpenFoodAPIClient.saveProduct(myUser, myProduct);
+
+    if (result.status != 1) {
+      throw Exception('Product could not be added: ${result.error}');
     }
   }
-  void addNewProduct(code,name) async {
-  // define the product to be added.
-  // more attributes available ...
-  Product myProduct = Product(
-    barcode: code,
-    productName: name,
-  );
-  // query the OpenFoodFacts API
-  Status result = await OpenFoodAPIClient.saveProduct(myUser, myProduct);
-
-  if (result.status != 1) {
-    throw Exception('Product could not be added: ${result.error}');
-  }
-}
 }

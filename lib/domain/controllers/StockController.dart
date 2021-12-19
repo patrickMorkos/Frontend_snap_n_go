@@ -28,19 +28,22 @@ class StockController extends GetxController {
   getStocksByUserId(dynamic userId) async {
     // dynamic res = await genericGet("Stock", "/user/$userId");
     dynamic res = await genericGet("Stock", "user/3");
-    List data = res;
-    print('data $data');
-    if (data.length == 0) stocks = [];
-    for (var item in data) {
+    // print('data $res');
+    if (res.length == 0) stocks = [];
+    for (var item in res) {
       stocks.add(item);
     }
     print("Successfully imported stocks from backend..");
   }
 
-  addStock(Stock? stock) {
+  addStock(Stock? stock)async {
+    // print('stock $stock');
     if (stock != null) {
-      stocks.add(stock);
-      print('Warehouse successfully added..');
+      dynamic res=await genericPost('Stock', stock);
+      if(res.statusCode == 200 || res.statusCode == 201){
+        return "Successfully added stock to backend..";
+      }
+      else return 'Unable to add stock to backend..';
     }
   }
 }
