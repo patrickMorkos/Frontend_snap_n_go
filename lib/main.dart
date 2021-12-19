@@ -20,17 +20,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
-  Future getUserInfo() async {
-    await getUser();
-    setState(() {});
-    print(uid);
-  }
-
-    @override
-  void initState() {
-    getUserInfo();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

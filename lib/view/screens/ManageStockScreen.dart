@@ -28,6 +28,7 @@ class _ManageStock extends State<ManageStock> {
   final loginController = Get.put(LoginController());
   final nameController = TextEditingController();
   final addressController = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -39,11 +40,11 @@ class _ManageStock extends State<ManageStock> {
               .getStocksByUserId(loginController.userInfo['id'])
               .forEach((i) {
             tmp.add(Stock.fromJson(i));
-          }),
-          setState(() {
-            stocks = tmp;
           })
         });
+    setState(() {
+      stocks = tmp;
+    });
   }
 
   //This Function of type widget returns the whole body of the ManageStock

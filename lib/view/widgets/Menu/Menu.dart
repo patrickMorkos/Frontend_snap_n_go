@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/utils/Authentication.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
+import 'package:snap_n_go/data/apiService.dart';
+import 'package:snap_n_go/domain/controllers/LoginController.dart';
 import 'package:snap_n_go/view/widgets/Menu/MenuItem.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -25,15 +27,13 @@ class Menu extends StatefulWidget {
 class _MenuState extends State<Menu> {
   //This Variable to check which button from the menu is clicked
   int whichBtn = -1;
-  late SharedPreferences prefs;
-
+  final loginController= Get.put(LoginController());
   //This is the iniState() Function to trigger when the Menu() widget is rendered
   @override
   void initState() {
     super.initState();
     setState(() async {
       whichBtn = widget.isActive;
-      prefs = await SharedPreferences.getInstance();
     });
   }
 
@@ -114,20 +114,20 @@ class _MenuState extends State<Menu> {
                         CircleAvatar(
                           radius: 15,
                           backgroundImage:
-                              imageUrl != null ? NetworkImage(imageUrl!) : null,
-                          child: imageUrl == null
+                              loginController.userInfo['imageUrl']!= null ? NetworkImage(loginController.userInfo['imageUrl']!) : null,
+                          child: loginController.userInfo['imageUrl'] == null
                               ? Icon(Icons.account_circle, size: 30)
                               : Container(),
                         ),
                         Text(
-                          name!,
+                          loginController.userInfo['username'],
                           style: TextStyle(
                             color: Colors.white,
                           ),
                         ),
                         TextButton(
                           onPressed: () {
-                            signOut();
+                            logout();
                           },
                           child: Text(
                             'Logout',
