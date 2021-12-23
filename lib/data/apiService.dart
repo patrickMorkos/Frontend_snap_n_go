@@ -5,6 +5,10 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:snap_n_go/core/constants/IP.dart';
 
+import 'package:openfoodfacts/model/OcrIngredientsResult.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
+import 'package:openfoodfacts/utils/TagType.dart';
+
 final externalEndpoint = 'https://world.openfoodfacts.org/api/v2';
 final internalEndpoint = getIP() + 'api';
 Future<String> getTwilioToken(String roomName, String userEmail) async {
@@ -57,13 +61,16 @@ Future<dynamic> genericPost(String entityName, dynamic body) async {
 // generic get request that takes the entity name
 Future<dynamic> genericGet(String entityName, String filter) async {
   final String url = internalEndpoint + '/$entityName/$filter';
+  // print('url is $url');
   var response = await http.get(Uri.parse(url)).catchError((error) {
     print('------------- ERROR -------------');
     print(error.toString());
   });
+  // print('respppppp $response');
   // print('respp ${jsonDecode(response.body)}');
   return jsonDecode(response.body);
 }
+
 // print('url: $url');
 // final dynamic response =
 //     await http.get(Uri.parse(url), headers: <String, String>{
@@ -92,8 +99,14 @@ Future<StreamedResponse> upload(List<int> file) async {
 }
 
 Future<dynamic> getProduct(String filter, String value) async {
-  final String url = '$externalEndpoint/search/$filter=$value';
-  var response = await http.get(Uri.parse(url)).catchError((error) {
+  final String url = '$externalEndpoint/search?$filter=$value';
+  print('url is $url');
+  var response = await http.get(Uri.parse(url),
+          // headers: <String, String>{
+          //   "Content-Encoding": "gzip",
+          //   "content-type": "application/json; charset=UTF-8",
+          // },
+          ).catchError((error) {
     print('------------- ERROR -------------');
     print(error.toString());
   });
@@ -103,6 +116,7 @@ Future<dynamic> getProduct(String filter, String value) async {
     return null;
   }
 }
+
 // print('url: $url');
 // final uri = Uri.parse(url);
 // final dynamic response = await http.get(uri, headers: <String, String>{
@@ -138,5 +152,18 @@ Future<void> logout() async {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());
   });
-  return response;
+  return jsonDecode(response.body);
+}
+
+Future<dynamic> genericDelete(String entityName,int id) async {
+  final String url = internalEndpoint + '/$entityName/$id';
+  final uri = Uri.parse(url);
+  final dynamic response = await http.delete(uri, headers: <String, String>{
+    "Content-Encoding": "gzip",
+    "content-type": "application/json; charset=UTF-8",
+  }).catchError((error) {
+    debugPrint("------------- ERROR -------------");
+    debugPrint(error.toString());
+  });
+  return jsonDecode(response.body);
 }

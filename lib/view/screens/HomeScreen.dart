@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
+import 'package:snap_n_go/view/widgets/Carousel/Carousel.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
 ///This widget class is responsible of the HomeScreen() content
@@ -31,13 +32,50 @@ class _HomeScreen extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'This is the Home Screen',
-                style: TextStyle(
-                  fontSize: 45,
-                  fontWeight: FontWeight.bold,
+              Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(getSw(context) / 21),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ]),
+                child: Text(
+                  'Welcome to SnapNGo',
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              SizedBox(
+                height: getSh(context) / 5,
+              ),
+              ImageCarousel(
+                items: [
+                  Image.asset(
+                    'images/mealscan.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                  Image.asset(
+                    'images/tellspec-chips.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                  Image.asset(
+                    'images/warehouseplanning.jpg',
+                    fit: BoxFit.cover,
+                  ),
+                  Image.asset(
+                    'images/inventory_tracking_system.png',
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -51,10 +89,7 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [
-          CustomAppBar(),
-          _HomeBody(context)
-        ],
+        children: [CustomAppBar(), _HomeBody(context)],
       ),
     );
   }
