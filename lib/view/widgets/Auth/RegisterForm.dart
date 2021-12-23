@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/core/utils/validation.dart';
+import 'package:snap_n_go/data/apiService.dart';
 import 'package:snap_n_go/domain/models/User.dart';
 
 ///This widget class is responsible of the RegisterForm() Content()
@@ -41,7 +44,7 @@ class _RegisterFormState extends State<RegisterForm> {
   bool isValidLastName = false;
   bool isValidEmail = false;
   bool isValidDateOfBirth = false;
-  bool isValidPassword = false;
+  bool isValidPassword = true;
   bool isValidConfirmPassword = false;
 
   //This variable of type User() is responsible of storing the new registered
@@ -57,7 +60,7 @@ class _RegisterFormState extends State<RegisterForm> {
     if (formIsValid()) {
       setState(() {
         registeredUser.firstName = firstName;
-        registeredUser.lastName = lastName;
+        registeredUser.lastName = lastName;  
         registeredUser.email = email;
         registeredUser.dateOdBirth = dateOfBirth;
         registeredUser.password = password;
@@ -65,8 +68,9 @@ class _RegisterFormState extends State<RegisterForm> {
       print('User is succesfully registered==========>' +
           registeredUser.toString());
       print('User json format is=====================>' +
-          registeredUser.toJson());
-      Get.toNamed('/');
+          jsonEncode(registeredUser).toString());
+      genericPost2('Auth/register', jsonEncode(registeredUser).toString());
+      // Get.toNamed('/');
     } else {
       print('Continue validation');
     }
@@ -254,7 +258,7 @@ class _RegisterFormState extends State<RegisterForm> {
         TextFormField(
           onChanged: (value) {
             setState(() {
-              isValidPassword = isPasswordValid(value);
+              isValidPassword = true;
               password = value;
               if (isPasswordValid(value)) {
                 isValidPassword = true;

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
+import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/Auth/RegisterForm.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -137,12 +138,7 @@ class _RegisterScreen extends State<RegisterScreen> {
       body: ListView(
         // padding: EdgeInsets.symmetric(
         //     horizontal: MediaQuery.of(context).size.width / 8),
-        children: [
-          Menu(
-            isActive: whichBtn,
-          ),
-          _RegisterBody(context)
-        ],
+        children: [CustomAppBar(), _RegisterBody(context)],
       ),
     );
   }

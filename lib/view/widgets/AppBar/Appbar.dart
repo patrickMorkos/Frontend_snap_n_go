@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Authentication.dart';
-import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/data/apiService.dart';
 
 class CustomAppBar extends StatefulWidget {
@@ -34,7 +34,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
     return PreferredSize(
       preferredSize: Size(screenSize.width, 1000),
       child: Container(
-        color: Colors.orange[300],
+        color: PRIMARY_COLOR,
         child: Padding(
           padding: EdgeInsets.all(20),
           child: Row(
@@ -44,10 +44,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () {
+                      onTap: () async {
                         setState(() {
                           activeItem = 0;
                         });
+                        await Get.toNamed("/");
                       },
                       child: Text(
                         'Discover',

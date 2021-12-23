@@ -6,6 +6,7 @@ import 'package:snap_n_go/view/screens/ManageStockScreen.dart';
 import 'package:snap_n_go/view/screens/RegisterScreen.dart';
 import 'package:snap_n_go/view/screens/ScanScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:snap_n_go/view/screens/StockProduct.dart';
 
 class Navigation {
   // Screen Routes List
@@ -20,6 +21,8 @@ class Navigation {
     GetPage(name: '/Scan', page: () => ScanScreen()),
     //ManageStock screen route
     GetPage(name: '/ManageStock', page: () => ManageStock()),
+    //StockProducts screen route
+    GetPage(name: '/Products', page: () => StockProducts()),
   ];
 
   List<GetPage<dynamic>> getNavigationList() {

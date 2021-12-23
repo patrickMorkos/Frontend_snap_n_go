@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/core/utils/validation.dart';
+import 'package:snap_n_go/data/LoginService.dart';
+import 'package:snap_n_go/data/apiService.dart';
+import 'package:snap_n_go/domain/entities/Authentication.dart';
 import 'package:snap_n_go/domain/models/User.dart';
 
 ///This widget class is responsible of the LoginForm() Content()
@@ -28,10 +31,15 @@ class _LoginFormState extends State<LoginForm> {
 
   //Those variables are responsible of validating the form
   bool isValidEmail = false;
-  bool isValidPassword = false;
+  bool isValidPassword = true;
 
   //This variable of type User() is responsible of storing the logged in user
   User loggedInUser = new User();
+
+  Authentication auth = new Authentication(
+    email: '',
+    password: '',
+  );
 
   //
   bool isChecking = false;
@@ -42,12 +50,15 @@ class _LoginFormState extends State<LoginForm> {
       setState(() {
         loggedInUser.email = email;
         loggedInUser.password = password;
+        auth.email = email;
+        auth.password = password;
       });
       print(
           'User is succesfully loggedIn==========>' + loggedInUser.toString());
-      print(
-          'User json format is=====================>' + loggedInUser.toJson());
-      Get.toNamed('/');
+      print('User json format is=====================>' +
+          loggedInUser.toJson().toString());
+      login(auth);
+      // Get.toNamed('/');
     } else {
       print('Continue validation');
     }
@@ -55,7 +66,7 @@ class _LoginFormState extends State<LoginForm> {
 
   //This function is responsible of validating the form
   bool formIsValid() {
-    if (isValidEmail == true && isValidPassword == true) {
+    if (isValidEmail == true) {
       return true;
     } else {
       return false;
@@ -100,7 +111,7 @@ class _LoginFormState extends State<LoginForm> {
         TextFormField(
           onChanged: (value) {
             setState(() {
-              isValidPassword = isPasswordValid(value);
+              isValidPassword = true;
               password = value;
               if (isPasswordValid(value)) {
                 isValidPassword = true;
