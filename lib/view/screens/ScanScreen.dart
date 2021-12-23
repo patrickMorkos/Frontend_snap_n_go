@@ -2,10 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/domain/controllers/OpenFoodController.dart';
 import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/BarcodeScanner/barcodeScanner.dart';
+import 'package:snap_n_go/view/widgets/CustomButton/CustomButton.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
 ///This widget class is responsible of the ScanScreen() content
@@ -19,8 +21,10 @@ class ScanScreen extends StatefulWidget {
 class _ScanScreen extends State<ScanScreen> {
   //This variable is responsible of the Scan screen active button from the menu
   int whichBtn = 1;
-  final foodController = Get.put(OpenFoodController());
+  String dropdownValue = 'Barcode';
 
+  final foodController = Get.put(OpenFoodController());
+  final searchController = TextEditingController();
   getFoodNutriments() {
     var nutriments = foodController.productInformation!['nutriments'];
     // print('nutriments--> $nutriments');
@@ -154,9 +158,10 @@ class _ScanScreen extends State<ScanScreen> {
               )
         : Container(
             margin: EdgeInsets.only(top: 0.1 * height),
-            child: isMobileDevice()? Text('Press On Scan Barcode To Start Scanning',
-                style: TextStyle(fontWeight: FontWeight.bold)):Text('Search for any product name',
-                style: TextStyle(fontWeight: FontWeight.bold))));
+            child: isMobileDevice()
+                ? Text('Press On Scan Barcode To Start Scanning',
+                    style: TextStyle(fontWeight: FontWeight.bold))
+                : Container()));
     // return foodController.isReady.isTrue?
   }
 
@@ -179,23 +184,114 @@ class _ScanScreen extends State<ScanScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    isMobileDevice()? Container(
-                        margin: EdgeInsets.only(left: width * 0.2),
-                        child: Barcode()):Container(),
-                    Container(
-                      margin: EdgeInsets.only(top: 10.0),
-                      child: TextField(
-                        onChanged: (value) {
-                          if (value.length >= 3) {
-                            Future.delayed(Duration(milliseconds: 3000),
-                                () async {
-                              await foodController.getProductInfoByName(value);
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        isMobileDevice()
+                            ? Container(
+                                margin: EdgeInsets.only(left: width * 0.2),
+                                child: Barcode())
+                            : Container(
+                                height: 50,
+                                width: getSw(context) * 0.6,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    )
+                                    // color: Colors.white,
+                                    ),
+                                child: TextField(
+                                  // decoration: InputDecoration(),
+                                  controller: searchController,
+                                  cursorColor: Colors.orange,
+                                  keyboardType: TextInputType.number,
+                                  onChanged: (value) {
+                                    if (value.length > 3) {
+                                      foodController.setBarcode(value);
+                                    }
+                                  },
+                                ),
+                              ),
+                        DropdownButton<String>(
+                          value: dropdownValue,
+                          icon: const Icon(Icons.arrow_downward),
+                          style: const TextStyle(color: Colors.deepPurple),
+                          underline: Container(
+                            height: 2,
+                            color: Colors.deepPurpleAccent,
+                          ),
+                          items: <String>['Barcode', 'Product Name']
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              dropdownValue = newValue!;
                             });
+                          },
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: getSh(context) / 20,
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: CustomButton(
+                        title: 'Search Product',
+                        onTapCallBack: () async {
+                          print('searching for product..');
+                          // await scanBarcode();
+                          // foodController.setBarcode('8024884500403');
+                          switch (dropdownValue) {
+                            case 'Barcode':
+                              foodController.setBarcode(
+                                  searchController.text.trim().toString());
+                              await foodController.getProductInfoByBarcode();
+                              break;
+                            case 'Product Name':
+                              searchController.text.trim().toString();
+                              await foodController.getProductInfoByName(
+                                  searchController.text
+                                      .trim()
+                                      .toLowerCase()
+                                      .toString());
+                              break;
+                            default:
+                          }
+                          foodController.toggleScanMode();
+                          if (foodController
+                                  .productInformation['product_name'] ==
+                              null) {
+                            customAlert(context, 'Error', 'Product Not Found !',
+                                AlertType.error, Colors.red);
+                          } else {
+                            customAlert(context, 'Success', 'Product Found !',
+                                AlertType.success, Colors.green);
                           }
                         },
                       ),
                     ),
+                    // Container(
+                    //   margin: EdgeInsets.only(top: 10.0),
+                    //   child: TextField(
+                    //     onChanged: (value) {
+                    //       if (value.length >= 3) {
+                    //         Future.delayed(Duration(milliseconds: 3000),
+                    //             () async {
+                    //           await foodController.getProductInfoByName(value);
+                    //         });
+                    //       }
+                    //     },
+                    //   ),
+                    // ),
                     _ProductCard(context),
                   ],
                 ),
@@ -206,6 +302,7 @@ class _ScanScreen extends State<ScanScreen> {
       ],
     );
   }
+
   ///This is the build function of the MenuItem() widget class
   @override
   Widget build(BuildContext context) {

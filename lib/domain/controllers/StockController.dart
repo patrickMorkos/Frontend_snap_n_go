@@ -36,14 +36,22 @@ class StockController extends GetxController {
     print("Successfully imported stocks from backend..");
   }
 
-  addStock(Stock? stock)async {
-    // print('stock $stock');
+  addStock(Stock? stock) async {
     if (stock != null) {
-      dynamic res=await genericPost('Stock', stock);
-      if(res.statusCode == 200 || res.statusCode == 201){
+      dynamic res = await genericPost('Stock', stock);
+      if (res.statusCode == 200 || res.statusCode == 201) {
         return "Successfully added stock to backend..";
-      }
-      else return 'Unable to add stock to backend..';
+      } else
+        return 'Unable to add stock to backend..';
+    }
+  }
+
+  removeStock(int idStock) async {
+    dynamic res = await genericDelete('Stock', idStock);
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      return 1;
+    } else {
+      return 0;
     }
   }
 }

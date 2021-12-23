@@ -34,7 +34,7 @@ class _BarcodeState extends State<Barcode> {
     // foodController.setBarcode('8024884500403');
     await foodController.getProductInfoByBarcode();
   }
-  
+
   Widget fadeAlertAnimation(
     BuildContext context,
     Animation<double> animation,
@@ -88,11 +88,12 @@ class _BarcodeState extends State<Barcode> {
         onTapCallBack: () async {
           print('scanning barcode..');
           await scanBarcode();
+          await foodController.getProductInfoByBarcode();
           foodController.toggleScanMode();
           if (foodController.productInformation['product_name'] == null) {
             customAlert(context, 'Error', 'Product Not Found !',
                 AlertType.error, AnimationType.fromTop, Colors.red);
-          }else{
+          } else {
             customAlert(context, 'Success', 'Product Found !',
                 AlertType.success, AnimationType.fromTop, Colors.green);
           }

@@ -20,7 +20,7 @@ class _ImageCarouselState extends State<ImageCarousel> {
     return CarouselSlider(
    items: widget.items,
    options: CarouselOptions(
-      height: screenSize.height/10,
+      height: screenSize.height/2,
       aspectRatio: 16/9,
       viewportFraction: 0.8,
       initialPage: 0,

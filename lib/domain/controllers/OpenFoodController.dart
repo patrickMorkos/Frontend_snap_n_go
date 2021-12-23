@@ -41,11 +41,13 @@ class OpenFoodController extends GetxController {
   }
 
   dynamic getProductInfoByBarcode() async {
-    var response = await getProduct('code', '8024884117809');
+    var response = await getProduct('code',barcode);
     print('response---> $response');
     toggleReady();
     List products = response['products'];
-    print('found match-> $products');
+    print('found products-> $products');
+    // print(products.length);
+    // print('only 1 ${products[0]}');
     if (products.length > 0) setProductInfo(products[0]);
     //to access product name--> product_name
     //to access product nutriments--> nutriments
@@ -57,6 +59,7 @@ class OpenFoodController extends GetxController {
     toggleReady();
     List products = response['products'];
     print('found match-> $products');
+    print(products[0]);
     if (products.length > 0) setProductInfo(products[0]);
   }
 
