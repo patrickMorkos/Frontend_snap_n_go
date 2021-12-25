@@ -25,7 +25,7 @@ class _StockProducts extends State<StockProducts> {
   int whichBtn = 2;
 
   //This variable is the stock name that we'll get from the screen of ManageStock()
-  String stockName = 'Kitchen';
+  String stockName = 'Warehouse';
 
   final formKey = GlobalKey<FormState>();
   final productNameController = TextEditingController();

@@ -26,39 +26,48 @@ class _ScanScreen extends State<ScanScreen> {
   final foodController = Get.put(OpenFoodController());
   final searchController = TextEditingController();
   getFoodNutriments() {
-    var nutriments = foodController.productInformation!['nutriments'];
+    var nutriments = foodController.productInformation['nutriments'];
     // print('nutriments--> $nutriments');
+    var protein = foodController.productInformation['nutriments']['proteins'];
+    var fat = foodController.productInformation['nutriments']['fats'];
+    var carbohydrates =
+        foodController.productInformation['nutriments']['carbohydrates'];
+    var bicarbonates =
+        foodController.productInformation['nutriments']['bicarbonates'];
+    var calcium = foodController.productInformation['nutriments']['calcium'];
+    var calories =
+        foodController.productInformation['nutriments']['energy-kcal'];
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Protein: ${foodController.productInformation!['nutriments']!['proteins']} g',
+          protein!=null?'Protein: $protein'+' g':'Protein: 0 g',
           style: TextStyle(color: Colors.grey[400]),
         ),
         Text(
-          'Fat: ${foodController.productInformation!['nutriments']!['fat']} g',
+          fat!=null?'Fat: $fat'+' g':'Fat: 0 g',
           style: TextStyle(color: Colors.grey[400]),
         ),
         Text(
-          'Carbohydrate: ${foodController.productInformation!['nutriments']!['carbohydrates']} g',
+          carbohydrates!=null?'Carbohydrate: $carbohydrates'+' g':'Carbohydrate: 0 g',
           style: TextStyle(color: Colors.grey[400]),
         ),
         Text(
-          'Bicarbonates: ${foodController.productInformation!['nutriments']!['bicarbonates']} g',
+          bicarbonates!=null? 'Bicarbonates: $bicarbonates'+' mg':'Bicarbonates: 0 mg',
           style: TextStyle(color: Colors.grey[400]),
         ),
         Text(
-          'Calcium: ${foodController.productInformation!['nutriments']!['calcium']} g',
+          calcium!=null? 'Calcium: $calcium'+' mg':'Calcium: 0 mg',
           style: TextStyle(color: Colors.grey[400]),
         ),
         Text(
-          'Calories: ${foodController.productInformation!['nutriments']!['energy-kcal']} g',
+          calories!=null?  'Calories: $calories'+' kcal':'Calories: 0 kcal',
           style: TextStyle(color: Colors.grey[400]),
         ),
-        Text(
-          'Expiry Date: ${foodController.productInformation!['expiration_date']}',
-          style: TextStyle(color: Colors.red),
-        ),
+        // Text(
+        //   'Expiry Date: ${foodController.productInformation!['expiration_date']}',
+        //   style: TextStyle(color: Colors.red),
+        // ),
       ],
     );
   }
@@ -109,14 +118,20 @@ class _ScanScreen extends State<ScanScreen> {
                           margin: EdgeInsets.only(top: 0.03 * height),
                           height: 0.2 * height,
                           // width: 0.3*width,
-                          child: Image.network(
-                            foodController.productInformation![
-                                'selected_images']!['front']!['display']!['fr'],
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, Object, StackTrace) {
-                              return Text('Unable to load Image');
-                            },
-                          ),
+                          child: foodController.productInformation![
+                                          'selected_images']['front']['display']
+                                      ['fr'] !=
+                                  null
+                              ? Image.network(
+                                  foodController.productInformation![
+                                          'selected_images']!['front']![
+                                      'display']!['fr'],
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, Object, StackTrace) {
+                                    return Text('Unable to load Image');
+                                  },
+                                )
+                              : CircularProgressIndicator(),
                         ),
                         Container(
                           // margin:EdgeInsets.only(top:0.2*height),
@@ -191,7 +206,7 @@ class _ScanScreen extends State<ScanScreen> {
                       children: [
                         isMobileDevice()
                             ? Container(
-                                margin: EdgeInsets.only(left: width * 0.2),
+                                margin: EdgeInsets.only(left: width * 0.1),
                                 child: Barcode())
                             : Container(
                                 height: 50,
@@ -216,69 +231,87 @@ class _ScanScreen extends State<ScanScreen> {
                                   },
                                 ),
                               ),
-                        DropdownButton<String>(
-                          value: dropdownValue,
-                          icon: const Icon(Icons.arrow_downward),
-                          style: const TextStyle(color: Colors.deepPurple),
-                          underline: Container(
-                            height: 2,
-                            color: Colors.deepPurpleAccent,
-                          ),
-                          items: <String>['Barcode', 'Product Name']
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              dropdownValue = newValue!;
-                            });
-                          },
-                        )
+                        isWebDevice()
+                            ? DropdownButton<String>(
+                                value: dropdownValue,
+                                icon: const Icon(Icons.arrow_downward),
+                                style:
+                                    const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                                items: <String>[
+                                  'Barcode',
+                                  'Product Name'
+                                ].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                },
+                              )
+                            : Container()
                       ],
                     ),
                     SizedBox(
                       height: getSh(context) / 20,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      child: CustomButton(
-                        title: 'Search Product',
-                        onTapCallBack: () async {
-                          print('searching for product..');
-                          // await scanBarcode();
-                          // foodController.setBarcode('8024884500403');
-                          switch (dropdownValue) {
-                            case 'Barcode':
-                              foodController.setBarcode(
-                                  searchController.text.trim().toString());
-                              await foodController.getProductInfoByBarcode();
-                              break;
-                            case 'Product Name':
-                              searchController.text.trim().toString();
-                              await foodController.getProductInfoByName(
-                                  searchController.text
-                                      .trim()
-                                      .toLowerCase()
-                                      .toString());
-                              break;
-                            default:
-                          }
-                          foodController.toggleScanMode();
-                          if (foodController
-                                  .productInformation['product_name'] ==
-                              null) {
-                            customAlert(context, 'Error', 'Product Not Found !',
-                                AlertType.error, Colors.red);
-                          } else {
-                            customAlert(context, 'Success', 'Product Found !',
-                                AlertType.success, Colors.green);
-                          }
-                        },
-                      ),
-                    ),
+                    isWebDevice()
+                        ? Container(
+                            alignment: Alignment.center,
+                            child: CustomButton(
+                              title: 'Search Product',
+                              onTapCallBack: () async {
+                                print('searching for product..');
+                                // await scanBarcode();
+                                // foodController.setBarcode('8024884500403');
+                                switch (dropdownValue) {
+                                  case 'Barcode':
+                                    foodController.setBarcode(searchController
+                                        .text
+                                        .trim()
+                                        .toString());
+                                    await foodController
+                                        .getProductInfoByBarcode();
+                                    break;
+                                  case 'Product Name':
+                                    searchController.text.trim().toString();
+                                    await foodController.getProductInfoByName(
+                                        searchController.text
+                                            .trim()
+                                            .toLowerCase()
+                                            .toString());
+                                    break;
+                                  default:
+                                }
+                                foodController.toggleScanMode();
+                                if (foodController
+                                        .productInformation['product_name'] ==
+                                    null) {
+                                  customAlert(
+                                      context,
+                                      'Error',
+                                      'Product Not Found !',
+                                      AlertType.error,
+                                      Colors.red);
+                                } else {
+                                  customAlert(
+                                      context,
+                                      'Success',
+                                      'Product Found !',
+                                      AlertType.success,
+                                      Colors.green);
+                                }
+                              },
+                            ),
+                          )
+                        : Container(),
                     // Container(
                     //   margin: EdgeInsets.only(top: 10.0),
                     //   child: TextField(
