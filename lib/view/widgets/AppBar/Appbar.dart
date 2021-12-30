@@ -41,105 +41,105 @@ class _CustomAppBarState extends State<CustomAppBar> {
         color: PRIMARY_COLOR,
         child: Padding(
           padding: EdgeInsets.all(20),
-          child: Row(
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          activeItem = 0;
-                          Get.toNamed("/");
-                        });
-                      },
-                      child: Text(
-                        'Discover',
-                        style: TextStyle(
-                            color: activeItem == 0
-                                ? Colors.white
-                                : Colors.black54),
+          child: Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          setState(() {
+                            activeItem = 0;
+                          });
+                          await Get.toNamed("/");
+                        },
+                        child: Text(
+                          'Discover',
+                          style: TextStyle(
+                              color: activeItem == 0
+                                  ? Colors.white
+                                  : Colors.black54),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: screenSize.width / 20),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          activeItem = 1;
-                          Get.toNamed('/Scan');
-                        });
-                      },
-                      child: Text(
-                        'Scan Now',
-                        style: TextStyle(
-                            color: activeItem == 1
-                                ? Colors.white
-                                : Colors.black54),
+                      SizedBox(width: screenSize.width / 20),
+                      InkWell(
+                        onTap: () async {
+                          setState(() {
+                            activeItem = 1;
+                          });
+                          await Get.toNamed('/Scan');
+                        },
+                        child: Text(
+                          'Scan Now',
+                          style: TextStyle(
+                              color: activeItem == 1
+                                  ? Colors.white
+                                  : Colors.black54),
+                        ),
                       ),
-                    ),
-                    SizedBox(width: screenSize.width / 20),
-                    isAuthenticated
-                        ? InkWell(
-                            onTap: () async {
-                              setState(() {
-                                activeItem = 2;
-                              });
-                              var destination = '';
-                              isAuthenticated
-                                  ? destination = '/ManageStock'
-                                  : destination = '/Login';
-                              await Get.toNamed(destination);
-                            },
-                            child: Text(
-                              'Manage your Stock',
-                              style: TextStyle(
-                                  color: activeItem == 2
-                                      ? Colors.white
-                                      : Colors.black54),
-                            ),
-                          )
-                        : Container(),
-                  ],
+                      SizedBox(width: screenSize.width / 20),
+                      isAuthenticated
+                          ? InkWell(
+                              onTap: () async {
+                                setState(() {
+                                  activeItem = 2;
+                                });
+                                var destination = '';
+                                isAuthenticated
+                                    ? destination = '/ManageStock'
+                                    : destination = '/Login';
+                                await Get.toNamed(destination);
+                              },
+                              child: Text(
+                                'Management',
+                                style: TextStyle(
+                                    color: activeItem == 2
+                                        ? Colors.white
+                                        : Colors.black54),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
                 ),
-              ),
-              isAuthenticated
-                  ? InkWell(
-                      onTap: () {
-                        setState(() {
-                          activeItem = 3;
-                          Get.toNamed('/');
-                          switchStatus(false);
-                        });
-                        // logout();
-                      },
-                      child: Text(
-                        'Logout',
-                        style: TextStyle(
-                            color: activeItem == 3
-                                ? Colors.white
-                                : Colors.black54),
+                isAuthenticated
+                    ? InkWell(
+                        onTap: () {
+                          setState(() {
+                            activeItem = 3;
+                          });
+                          // logout();
+                        },
+                        child: Text(
+                          'Logout',
+                          style: TextStyle(
+                              color: activeItem == 3
+                                  ? Colors.white
+                                  : Colors.black54),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () async {
+                          setState(() {
+                            activeItem = 2;
+                          });
+                          await Get.toNamed('/Login');
+                        },
+                        child: Text(
+                          'Login',
+                          style: TextStyle(
+                              color: activeItem == 3
+                                  ? Colors.white
+                                  : Colors.black54),
+                        ),
                       ),
-                    )
-                  : InkWell(
-                      onTap: () async {
-                        setState(() {
-                          activeItem = 4;
-                        });
-                        await Get.toNamed('/Login');
-                      },
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                            color: activeItem == 4
-                                ? Colors.white
-                                : Colors.black54),
-                      ),
-                    ),
-              SizedBox(
-                width: screenSize.width / 50,
-              ),
-            ],
+                // SizedBox(
+                //   width: screenSize.width / 50,
+                // ),
+              ],
+            ),
           ),
         ),
       ),

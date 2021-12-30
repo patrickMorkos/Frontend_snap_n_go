@@ -41,14 +41,22 @@ class OpenFoodController extends GetxController {
   }
 
   dynamic getProductInfoByBarcode() async {
-    var response = await getProduct('code',barcode);
+    var response = await getProduct('code', barcode);
     print('response---> $response');
-    toggleReady();
-    List products = response['products'];
-    print('found products-> $products');
+    // var count = int.parse(response['count']??'0');
+    var count = response['count'];
+    // print(count.runtimeType);
+    if (count != 0) {
+      toggleReady();
+      List products = response['products'];
+      print('found products-> $products');
+      if(products.length>0) setProductInfo(products[0]);
+    } else {
+      print('No product found');
+    }
+    // toggleReady();
     // print(products.length);
     // print('only 1 ${products[0]}');
-    if (products.length > 0) setProductInfo(products[0]);
     //to access product name--> product_name
     //to access product nutriments--> nutriments
   }
