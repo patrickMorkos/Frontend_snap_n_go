@@ -1,17 +1,17 @@
 import 'dart:convert';
 
 class LoggedUser {
-   final int id;
-   final String? email;
-   final String? accessToken;
-   final String? name;
-   final String? imageUrl;
+  final int? id;
+  final String? email;
+  final String? accessToken;
+  final String? name;
+  final String? imageUrl;
   LoggedUser({
-     required this.id,
-     this.email,
-     this.accessToken,
-     this.name,
-     this.imageUrl,
+    required this.id,
+    this.email,
+    this.accessToken,
+    this.name,
+    this.imageUrl,
   });
 
   LoggedUser copyWith({
@@ -52,7 +52,8 @@ class LoggedUser {
 
   String toJson() => json.encode(toMap());
 
-  factory LoggedUser.fromJson(String source) => LoggedUser.fromMap(json.decode(source));
+  factory LoggedUser.fromJson(String source) =>
+      LoggedUser.fromMap(json.decode(source));
 
   @override
   String toString() {
@@ -62,21 +63,21 @@ class LoggedUser {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is LoggedUser &&
-      other.id == id &&
-      other.email == email &&
-      other.accessToken == accessToken &&
-      other.name == name &&
-      other.imageUrl == imageUrl;
+        other.id == id &&
+        other.email == email &&
+        other.accessToken == accessToken &&
+        other.name == name &&
+        other.imageUrl == imageUrl;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      email.hashCode ^
-      accessToken.hashCode ^
-      name.hashCode ^
-      imageUrl.hashCode;
+        email.hashCode ^
+        accessToken.hashCode ^
+        name.hashCode ^
+        imageUrl.hashCode;
   }
 }

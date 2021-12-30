@@ -3,7 +3,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:snap_n_go/core/navigation/Navigation.dart';
+import 'package:snap_n_go/domain/models/StockProduct.dart';
 import 'package:snap_n_go/view/screens/HomeScreen.dart';
+import 'package:snap_n_go/view/screens/StockProduct.dart';
 
 ///This class the main of the website
 

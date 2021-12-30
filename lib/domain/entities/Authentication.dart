@@ -1,6 +1,6 @@
 class Authentication {
-  late final String email;
-  late final String password;
+  String? email;
+  String? password;
 
   Authentication({required this.email, required this.password});
 
@@ -11,8 +11,8 @@ class Authentication {
 
   Map<String, dynamic> toJson() {
     final Map<String, String> data = new Map<String, String>();
-    data['email'] = this.email;
-    data['password'] = this.password;
+    data['email'] = this.email!;
+    data['password'] = this.password!;
     return data;
   }
 }

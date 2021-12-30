@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:html';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -55,6 +57,45 @@ Future<dynamic> genericPost(String entityName, dynamic body) async {
     debugPrint(error.toString());
   });
   print('RESPONSE====> ${jsonDecode(response.body)}');
+  return jsonDecode(response.body);
+}
+
+// generic get request that takes the entity name
+Future<dynamic> genericPost2(String entityName, String body) async {
+  final String url = internalEndpoint + '/$entityName';
+  print('THE REQUEST URL IS===>' + url.toString());
+  var response = await http
+      .post(
+    Uri.parse(url),
+    body: body,
+  )
+      .catchError((error) {
+    print('------------- ERROR -------------');
+    print(error.toString());
+  });
+  // print('respp ${jsonDecode(response.body)}');
+  return jsonDecode(response.body);
+}
+
+//get user info
+Future<dynamic> getUserInfo(String token) async {
+  final String url = '$internalEndpoint/Auth/user';
+  // String token = await Candidate().getToken();
+
+  print('THE REQUEST URL IS===>' + url.toString());
+  print('Token well received====>' + token);
+  final dynamic response = await http.get(
+    Uri.parse(url),
+    headers: <String, String>{
+      "content-length": "213",
+      "content-type": "application/json; charset=utf-8",
+      "date": "Thu23 Dec 2021 07:33:33 GMT",
+      "server": "Kestrel"
+    },
+  ).catchError((error) {
+    debugPrint("------------- ERROR -------------");
+    debugPrint(error.toString());
+  });
   return jsonDecode(response.body);
 }
 
