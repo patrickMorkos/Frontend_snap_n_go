@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
-import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
+import 'package:snap_n_go/view/widgets/Auth/LoginForm.dart';
 import 'package:snap_n_go/view/widgets/Auth/RegisterForm.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -17,10 +17,10 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreen extends State<RegisterScreen> {
-  //This variable is responsible on the register active button from the menu
-  int whichBtn = 5;
+  ///This variable is responsible on the register active button from the menu
+  int whichBtn = 3;
 
-  //This Function of type widget returns the whole body of the RegisterScreen
+  ///This Function of type widget returns the whole body of the RegisterScreen
   Widget _RegisterBody(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
@@ -64,7 +64,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                 SizedBox(
                   height: getSh(context) / 80,
                 ),
-                //Row for the Register button
+                //Row for the Login button
                 Row(
                   mainAxisAlignment: isLargeScreen(context)
                       ? MainAxisAlignment.start
@@ -115,7 +115,7 @@ class _RegisterScreen extends State<RegisterScreen> {
                   width: getSw(context) / 5.33,
                 )
               : Container(),
-
+          //Register form
           Padding(
             padding: isLargeScreen(context)
                 ? EdgeInsets.symmetric(vertical: getSh(context) / 6)
@@ -131,14 +131,18 @@ class _RegisterScreen extends State<RegisterScreen> {
     );
   }
 
+  //This is the build function of the RegisterScreen() widget class
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        // padding: EdgeInsets.symmetric(
-        //     horizontal: MediaQuery.of(context).size.width / 8),
-        children: [CustomAppBar(), _RegisterBody(context)],
+        children: [
+          Menu(
+            isActive: whichBtn,
+          ),
+          _RegisterBody(context)
+        ],
       ),
     );
   }

@@ -1,8 +1,8 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:flutter/material.dart';
+import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
-import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/Carousel/Carousel.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -36,7 +36,7 @@ class _HomeScreen extends State<HomeScreen> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(getSw(context) / 21),
-                    color: Colors.white,
+                    color: PRIMARY_COLOR,
                     boxShadow: [
                       BoxShadow(
                         color: Colors.grey.withOpacity(0.5),
@@ -46,7 +46,7 @@ class _HomeScreen extends State<HomeScreen> {
                       ),
                     ]),
                 child: Text(
-                  'Welcome to SnapNGo',
+                  'Welcome to `Snap n Go`',
                   style: TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,
@@ -89,7 +89,10 @@ class _HomeScreen extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [CustomAppBar(), _HomeBody(context)],
+        children: [
+          Menu(isActive: whichBtn),
+          _HomeBody(context),
+        ],
       ),
     );
   }

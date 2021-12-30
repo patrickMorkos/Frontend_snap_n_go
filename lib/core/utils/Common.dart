@@ -94,3 +94,14 @@ customAlert(context, title, desc, type,textColor) {
     alertAnimation: fadeAlertAnimation,
   ).show();
 }
+
+//Functin that returns the current system date
+//in the format dd/mm/yyyy
+String getSystemDate() {
+  String now = DateTime.now().day.toString() +
+      '-' +
+      DateTime.now().month.toString() +
+      '-' +
+      DateTime.now().year.toString();
+  return now;
+}

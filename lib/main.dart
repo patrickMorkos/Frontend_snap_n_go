@@ -5,8 +5,6 @@ import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:snap_n_go/core/navigation/Navigation.dart';
 import 'package:snap_n_go/view/screens/HomeScreen.dart';
 
-import 'core/utils/Authentication.dart';
-
 ///This class the main of the website
 
 void main() {

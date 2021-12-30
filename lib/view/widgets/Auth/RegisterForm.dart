@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
+import 'package:snap_n_go/core/utils/Authentication.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/core/utils/validation.dart';
 import 'package:snap_n_go/data/apiService.dart';
@@ -47,12 +47,11 @@ class _RegisterFormState extends State<RegisterForm> {
   bool isValidPassword = true;
   bool isValidConfirmPassword = false;
 
-  //This variable of type User() is responsible of storing the new registered
-  //user
+  //This variable of type User() is responsible of storing the new registered user
   User registeredUser = new User();
 
   //This variable is responsible for seeing if the button register is clicked so
-  // we can check the form
+  //we can check the form
   bool isChecking = false;
 
   //This function is responsible of registering the user to the backend
@@ -60,7 +59,7 @@ class _RegisterFormState extends State<RegisterForm> {
     if (formIsValid()) {
       setState(() {
         registeredUser.firstName = firstName;
-        registeredUser.lastName = lastName;  
+        registeredUser.lastName = lastName;
         registeredUser.email = email;
         registeredUser.dateOdBirth = dateOfBirth;
         registeredUser.password = password;
@@ -68,9 +67,10 @@ class _RegisterFormState extends State<RegisterForm> {
       print('User is succesfully registered==========>' +
           registeredUser.toString());
       print('User json format is=====================>' +
-          jsonEncode(registeredUser).toString());
-      genericPost2('Auth/register', jsonEncode(registeredUser).toString());
-      // Get.toNamed('/');
+          jsonEncode(registeredUser.toJson()).toString());
+      genericPost('Auth/register', jsonEncode(registeredUser).toString());
+      switchStatus(true);
+      Get.toNamed('/');
     } else {
       print('Continue validation');
     }

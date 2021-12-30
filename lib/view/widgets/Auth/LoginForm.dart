@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
+import 'package:snap_n_go/core/utils/Authentication.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/core/utils/validation.dart';
 import 'package:snap_n_go/data/LoginService.dart';
@@ -31,42 +31,53 @@ class _LoginFormState extends State<LoginForm> {
 
   //Those variables are responsible of validating the form
   bool isValidEmail = false;
-  bool isValidPassword = true;
+  bool isValidPassword = false;
 
   //This variable of type User() is responsible of storing the logged in user
   User loggedInUser = new User();
 
-  Authentication auth = new Authentication(
-    email: '',
-    password: '',
-  );
-
-  //
+  //This variable is responsible to trigger when the login button is clicked
+  //to check for validation
   bool isChecking = false;
 
-  //This function is responsible of loggin in the user
-  void loginUser() {
+  //This variable is responsible of the login status is valid or not credentials
+  int isValidCredentials = -1;
+
+  //This function is responsible of logging in the user
+  void loginUser() async {
     if (formIsValid()) {
+      late Authentication auth;
       setState(() {
         loggedInUser.email = email;
         loggedInUser.password = password;
-        auth.email = email;
-        auth.password = password;
+        auth = new Authentication(
+          email: email,
+          password: password,
+        );
       });
-      print(
-          'User is succesfully loggedIn==========>' + loggedInUser.toString());
-      print('User json format is=====================>' +
-          loggedInUser.toJson().toString());
-      login(auth);
-      // Get.toNamed('/');
-    } else {
-      print('Continue validation');
+      //Calling the Login() function from the LoginService
+      await Login(auth);
+      String responseMessage =
+          getResponseMessage().split('message:')[1].split('}')[0].toString();
+      if (responseMessage == ' Invalid Credentials') {
+        setState(() {
+          isValidCredentials = 1;
+        });
+      } else {
+        setState(() {
+          isValidCredentials = 0;
+        });
+        dynamic res = await genericGet('Auth/user', '');
+        print(res);
+        Get.toNamed('/');
+        switchStatus(true);
+      }
     }
   }
 
   //This function is responsible of validating the form
   bool formIsValid() {
-    if (isValidEmail == true) {
+    if (isValidEmail == true && isValidPassword == true) {
       return true;
     } else {
       return false;
@@ -111,10 +122,10 @@ class _LoginFormState extends State<LoginForm> {
         TextFormField(
           onChanged: (value) {
             setState(() {
-              isValidPassword = true;
+              isValidPassword = !isEmptyInput(value);
               password = value;
-              if (isPasswordValid(value)) {
-                isValidPassword = true;
+              if (value.length == 0) {
+                isValidPassword = false;
               }
             });
           },
@@ -122,7 +133,7 @@ class _LoginFormState extends State<LoginForm> {
           decoration: InputDecoration(
             counterStyle: TextStyle(color: Colors.red),
             counterText: isValidPassword == false && isChecking == true
-                ? 'Enter a valid password'
+                ? 'Password is required'
                 : '',
             hintText: 'Password',
             suffixIcon: InkWell(
@@ -159,37 +170,66 @@ class _LoginFormState extends State<LoginForm> {
         ),
         SizedBox(height: getSh(context) / 26.3),
         //Button for the Login
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: PRIMARY_COLOR,
-                spreadRadius: 10,
-                blurRadius: 20,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            //Login btn
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                    color: PRIMARY_COLOR,
+                    spreadRadius: 10,
+                    blurRadius: 20,
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: ElevatedButton(
-            child: Container(
-                width: double.infinity,
-                height: 50,
-                child: Center(child: Text("Login"))),
-            onPressed: () {
-              setState(() {
-                isChecking = true;
-              });
-              loginUser();
-            },
-            style: ElevatedButton.styleFrom(
-              primary: Colors.orange.shade900,
-              onPrimary: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
+              child: ElevatedButton(
+                child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    child: Center(child: Text("Login"))),
+                onPressed: () {
+                  setState(() {
+                    isChecking = true;
+                  });
+                  loginUser();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.orange.shade900,
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                ),
               ),
             ),
-          ),
+            //The invalid credentials error text
+            (isValidCredentials == 1 && isValidCredentials != 0) &&
+                    isChecking == true &&
+                    formIsValid() == true
+                ? Container(
+                    padding: EdgeInsets.only(top: getSh(context) / 100),
+                    child: Text(
+                      'Invalid Credentials',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(fontSize: 12, color: Colors.red),
+                    ),
+                  )
+                : Container()
+            // isValidCredentials=false && isChecking == true
+            //     ? Container(
+            //         padding: EdgeInsets.only(top: getSh(context) / 100),
+            //         child: Text(
+            //           'Date of birth required',
+            //           textAlign: TextAlign.right,
+            //           style: TextStyle(fontSize: 12, color: Colors.red),
+            //         ),
+            //       )
+            //     : Container(),
+          ],
         ),
       ],
     );

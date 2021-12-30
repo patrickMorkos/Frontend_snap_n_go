@@ -56,7 +56,16 @@ class User {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "firstname": this.firstName,
+      "lastname": this.lastName,
+      "email": this.email,
+      "dob": this.dateOdBirth,
+      "password": this.password,
+    };
+  }
 
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 

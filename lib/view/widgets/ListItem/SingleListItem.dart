@@ -3,18 +3,18 @@ import 'package:snap_n_go/core/constants/Constants.dart';
 
 class SingleListItem extends StatefulWidget {
   final String itemHeader;
-  final String itemTitle;
+  String itemTitle;
   final String itemSubTitle;
-  final Function deleteBtnFunctionality;
-  final Function editBtnFunctionlity;
+  final Function addBtnFunctionality;
+  final Function removeBtnFunctionality;
 
   SingleListItem({
     Key? key,
     this.itemHeader = '',
     this.itemTitle = '',
     this.itemSubTitle = '',
-    required this.deleteBtnFunctionality,
-    required this.editBtnFunctionlity,
+    required this.addBtnFunctionality,
+    required this.removeBtnFunctionality,
   }) : super(key: key);
 
   @override
@@ -67,7 +67,7 @@ class _SingleListItemState extends State<SingleListItem> {
                             height: 10.0,
                           ),
                           Text(
-                            widget.itemSubTitle,
+                            (widget.itemSubTitle).toString(),
                             style: TextStyle(
                                 color: Colors.black45,
                                 fontWeight: FontWeight.bold),
@@ -78,32 +78,54 @@ class _SingleListItemState extends State<SingleListItem> {
                         children: [
                           InkWell(
                             onTap: () {
-                              widget.editBtnFunctionlity();
+                              setState(() {
+                                // widget.itemSubTitle = widget.itemSubTitle - 1;
+                                widget.itemTitle =
+                                    widget.itemTitle.split(':')[0] +
+                                        ': ' +
+                                        (int.parse(widget.itemTitle
+                                                    .split(':')[1]
+                                                    .toString()) -
+                                                1)
+                                            .toString();
+                              });
+                              widget.removeBtnFunctionality();
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: Image(
-                                image: AssetImage('assets/images/edit.png'),
-                                width: 15,
-                                height: 15,
-                              ),
+                              child: Icon(Icons.remove),
+                              // Image(
+                              //   image: AssetImage('assets/images/edit.png'),
+                              //   width: 15,
+                              //   height: 15,
+                              // ),
                             ),
                           ),
                           //The delete Button
                           InkWell(
                             onTap: () {
                               setState(() {
-                                isDeleted = true;
+                                // isDeleted = true;
+                                // widget.itemSubTitle = widget.itemSubTitle + 1;
+                                widget.itemTitle =
+                                    widget.itemTitle.split(':')[0] +
+                                        ': ' +
+                                        (int.parse(widget.itemTitle
+                                                    .split(':')[1]
+                                                    .toString()) +
+                                                1)
+                                            .toString();
                               });
-                              widget.deleteBtnFunctionality();
+                              widget.addBtnFunctionality();
                             },
                             child: Padding(
                               padding: const EdgeInsets.only(right: 10),
-                              child: Image(
-                                image: AssetImage('assets/images/delete.png'),
-                                width: 15,
-                                height: 15,
-                              ),
+                              child: Icon(Icons.add),
+                              // Image(
+                              //   image: AssetImage('assets/images/delete.png'),
+                              //   width: 15,
+                              //   height: 15,
+                              // ),
                             ),
                           ),
                         ],
@@ -113,7 +135,7 @@ class _SingleListItemState extends State<SingleListItem> {
                 ),
                 SizedBox(
                   height: 15.0,
-                )
+                ),
               ],
             ),
           );

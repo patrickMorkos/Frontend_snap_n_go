@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 
-///This widget class is responsible of the a single item from the menu
+///This widget class is responsible of a single item from the menu
 ///It contains a text and a (container) if the item is active
 ///and a (SizedBox) if the item is not active
 
@@ -50,8 +50,9 @@ class _MenuItemState extends State<MenuItem> {
               Text(
                 '${widget.title}',
                 style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: widget.isActive ? PRIMARY_COLOR : Colors.deepOrange),
+                  fontWeight: FontWeight.bold,
+                  color: widget.isActive ? PRIMARY_COLOR : Colors.deepOrange,
+                ),
               ),
               SizedBox(
                 height: getSh(context) / 131.5,
@@ -59,8 +60,9 @@ class _MenuItemState extends State<MenuItem> {
               widget.isActive
                   ? Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: getSw(context) / 133,
-                          vertical: getSh(context) / 394.5),
+                        horizontal: getSw(context) / 133,
+                        vertical: getSh(context) / 394.5,
+                      ),
                       decoration: BoxDecoration(
                         color: PRIMARY_COLOR,
                         borderRadius: BorderRadius.circular(30),

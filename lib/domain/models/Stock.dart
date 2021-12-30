@@ -1,38 +1,34 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:snap_n_go/domain/models/Product.dart';
-import 'package:snap_n_go/domain/models/StockProduct.dart';
 
 class Stock {
-  final dynamic id;
-  final dynamic name;
-  final dynamic address;
-  final List<dynamic> products;
-  final List<dynamic> stockProducts;
+  dynamic id;
+  dynamic name;
+  List<dynamic> stockProducts;
+  dynamic userId;
+  dynamic address;
   Stock({
-    this.id,
+    required this.id,
     required this.name,
-    required this.address,
-    required this.products,
     required this.stockProducts,
+    required this.userId,
+    required this.address,
   });
-
-
 
   Stock copyWith({
     dynamic? id,
     dynamic? name,
-    dynamic? address,
-    List<dynamic>? products,
     List<dynamic>? stockProducts,
+    dynamic? userId,
+    dynamic? address,
   }) {
     return Stock(
       id: id ?? this.id,
       name: name ?? this.name,
-      address: address ?? this.address,
-      products: products ?? this.products,
       stockProducts: stockProducts ?? this.stockProducts,
+      userId: userId ?? this.userId,
+      address: address ?? this.address,
     );
   }
 
@@ -40,9 +36,9 @@ class Stock {
     return {
       'id': id,
       'name': name,
-      'address': address,
-      'products': products,
       'stockProducts': stockProducts,
+      'userId': userId,
+      'address': address,
     };
   }
 
@@ -50,39 +46,49 @@ class Stock {
     return Stock(
       id: map['id'] ?? null,
       name: map['name'] ?? null,
-      address: map['address'] ?? null,
-      products: List<dynamic>.from(map['products']),
       stockProducts: List<dynamic>.from(map['stockProducts']),
+      userId: map['userId'] ?? null,
+      address: map['address'] ?? null,
     );
   }
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
   factory Stock.fromJson(String source) => Stock.fromMap(json.decode(source));
 
   @override
   String toString() {
-    return 'Stock(id: $id, name: $name, address: $address, products: $products, stockProducts: $stockProducts)';
+    return 'Stock(id: $id, name: $name, stockProducts: $stockProducts, userId: $userId, address: $address)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is Stock &&
-      other.id == id &&
-      other.name == name &&
-      other.address == address &&
-      listEquals(other.products, products) &&
-      listEquals(other.stockProducts, stockProducts);
+        other.id == id &&
+        other.name == name &&
+        listEquals(other.stockProducts, stockProducts) &&
+        other.userId == userId &&
+        other.address == address;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      name.hashCode ^
-      address.hashCode ^
-      products.hashCode ^
-      stockProducts.hashCode;
+        name.hashCode ^
+        stockProducts.hashCode ^
+        userId.hashCode ^
+        address.hashCode;
+  }
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      "id": this.id != null ? this.id : null,
+      "name": this.name != null ? this.name : null,
+      "stockProducts": this.stockProducts != null ? this.stockProducts : null,
+      "userId": this.userId != null ? this.userId : null,
+      "address": this.address != null ? this.address : null,
+    };
   }
 }

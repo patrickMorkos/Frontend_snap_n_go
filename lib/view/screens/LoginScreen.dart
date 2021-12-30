@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
-import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/Auth/LoginForm.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
 
@@ -17,14 +16,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreen extends State<LoginScreen> {
-  //This variable is responsible on the login screen active button from the menu
-  int whichBtn = 4;
+  ///This variable is responsible on the login screen active button from the menu
+  int whichBtn = 3;
 
-  //This Function of type widget returns the whole body of the LoginScreen
+  ///This Function of type widget returns the whole body of the LoginScreen
   Widget _LoginBody(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(
-          left: getSw(context) / 21, right: getSw(context) / 21),
+        left: getSw(context) / 21,
+        right: getSw(context) / 21,
+        top: getSw(context) / 13,
+      ),
       child: Flex(
         direction: isLargeScreen(context) ? Axis.horizontal : Axis.vertical,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +34,7 @@ class _LoginScreen extends State<LoginScreen> {
           //Container containing text and image
           Container(
             width:
-                isLargeScreen(context) ? getSw(context) / 3.8 : getSw(context),
+                isLargeScreen(context) ? getSw(context) / 3.3 : getSw(context),
             child: Column(
               crossAxisAlignment: isLargeScreen(context)
                   ? CrossAxisAlignment.start
@@ -54,7 +56,7 @@ class _LoginScreen extends State<LoginScreen> {
                 ),
                 //Label fot the register
                 Text(
-                  "If you don't have an account!",
+                  "If you don't have an account",
                   style: TextStyle(
                       color: Colors.black87, fontWeight: FontWeight.bold),
                   textAlign: isLargeScreen(context)
@@ -85,7 +87,7 @@ class _LoginScreen extends State<LoginScreen> {
                         Get.toNamed('/Register');
                       },
                       child: Text(
-                        "Register here!",
+                        "Register from here!",
                         style: TextStyle(
                             color: PRIMARY_COLOR, fontWeight: FontWeight.bold),
                         textAlign: isLargeScreen(context)
@@ -115,7 +117,7 @@ class _LoginScreen extends State<LoginScreen> {
                   width: getSw(context) / 5.33,
                 )
               : Container(),
-
+          //Login form
           Padding(
             padding: isLargeScreen(context)
                 ? EdgeInsets.symmetric(vertical: getSh(context) / 6)
@@ -131,13 +133,18 @@ class _LoginScreen extends State<LoginScreen> {
     );
   }
 
-  ///This is the build function of the MenuItem() widget class
+  //This is the build function of the LoginScreen() widget class
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [CustomAppBar(), _LoginBody(context)],
+        children: [
+          Menu(
+            isActive: whichBtn,
+          ),
+          _LoginBody(context)
+        ],
       ),
     );
   }

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:snap_n_go/core/constants/Constants.dart';
 import 'package:snap_n_go/core/utils/Authentication.dart';
-import 'package:snap_n_go/data/apiService.dart';
+
+//This widget is a custom AppBar
 
 class CustomAppBar extends StatefulWidget {
   const CustomAppBar({Key? key}) : super(key: key);
@@ -12,16 +13,19 @@ class CustomAppBar extends StatefulWidget {
 }
 
 class _CustomAppBarState extends State<CustomAppBar> {
+  //This variable is to know which item in the appBar is clicked and active
   int activeItem = 0;
+
+  //This variable is to save the status of the user if he is logged in or not
   bool isAuthenticated = false;
 
   @override
   void initState() {
     super.initState();
+    //Here we are checking the status of the user using the function isLoggedIn()
     var isAuth;
     Future.delayed(Duration.zero, () async {
       isAuth = await isLoggedIn();
-      // print('isAuth $isAuth');
       setState(() {
         isAuthenticated = isAuth;
       });
@@ -44,11 +48,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     InkWell(
-                      onTap: () async {
+                      onTap: () {
                         setState(() {
                           activeItem = 0;
+                          Get.toNamed("/");
                         });
-                        await Get.toNamed("/");
                       },
                       child: Text(
                         'Discover',
@@ -60,11 +64,11 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                     SizedBox(width: screenSize.width / 20),
                     InkWell(
-                      onTap: () async {
+                      onTap: () {
                         setState(() {
                           activeItem = 1;
+                          Get.toNamed('/Scan');
                         });
-                        await Get.toNamed('/Scan');
                       },
                       child: Text(
                         'Scan Now',
@@ -104,8 +108,10 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       onTap: () {
                         setState(() {
                           activeItem = 3;
+                          Get.toNamed('/');
+                          switchStatus(false);
                         });
-                        logout();
+                        // logout();
                       },
                       child: Text(
                         'Logout',
@@ -118,14 +124,14 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   : InkWell(
                       onTap: () async {
                         setState(() {
-                          activeItem = 2;
+                          activeItem = 4;
                         });
                         await Get.toNamed('/Login');
                       },
                       child: Text(
                         'Login',
                         style: TextStyle(
-                            color: activeItem == 3
+                            color: activeItem == 4
                                 ? Colors.white
                                 : Colors.black54),
                       ),

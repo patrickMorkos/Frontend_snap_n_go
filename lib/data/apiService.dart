@@ -5,12 +5,9 @@ import 'package:http/http.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:snap_n_go/core/constants/IP.dart';
 
-import 'package:openfoodfacts/model/OcrIngredientsResult.dart';
-import 'package:openfoodfacts/openfoodfacts.dart';
-import 'package:openfoodfacts/utils/TagType.dart';
-
 final externalEndpoint = 'https://world.openfoodfacts.org/api/v2';
 final internalEndpoint = getIP() + 'api';
+
 Future<String> getTwilioToken(String roomName, String userEmail) async {
   final response = await http
       .post(
@@ -37,37 +34,44 @@ Future<String> getTwilioToken(String roomName, String userEmail) async {
 
 // generic post request that takes the entity name to save
 // and access token and the needed body and make an post request
-// to http://quickeyIP/rest/entities/entityNameToSave
 Future<dynamic> genericPost(String entityName, dynamic body) async {
   // getting the correct path to call
   final String url = internalEndpoint + '/$entityName';
-  print('url is $url');
+  print('THE URL IS ===> $url');
+  print('THE BODY IS ===> $body');
   // making the api call
-  final dynamic response = await http
-      .post(Uri.parse(url),
-          headers: <String, String>{
-            "Content-Encoding": "gzip",
-            "content-type": "application/json; charset=UTF-8",
-          },
-          body: jsonEncode(body))
-      .catchError((error) {
+  var response = await http
+      .post(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: body,
+  )
+      .catchError((
+    error,
+  ) {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());
   });
-  print('resppp ${jsonDecode(response.body)}');
+  print('RESPONSE====> ${jsonDecode(response.body)}');
   return jsonDecode(response.body);
 }
 
 // generic get request that takes the entity name
 Future<dynamic> genericGet(String entityName, String filter) async {
-  final String url = internalEndpoint + '/$entityName/$filter';
-  // print('url is $url');
+  final String url;
+  if (filter == '') {
+    url = internalEndpoint + '/$entityName';
+  } else {
+    url = internalEndpoint + '/$entityName/$filter';
+  }
+  print('url is $url');
   var response = await http.get(Uri.parse(url)).catchError((error) {
     print('------------- ERROR -------------');
     print(error.toString());
   });
   // print('respppppp $response');
-  // print('respp ${jsonDecode(response.body)}');
   return jsonDecode(response.body);
 }
 
@@ -101,12 +105,15 @@ Future<StreamedResponse> upload(List<int> file) async {
 Future<dynamic> getProduct(String filter, String value) async {
   final String url = '$externalEndpoint/search?$filter=$value';
   print('url is $url');
-  var response = await http.get(Uri.parse(url),
-          // headers: <String, String>{
-          //   "Content-Encoding": "gzip",
-          //   "content-type": "application/json; charset=UTF-8",
-          // },
-          ).catchError((error) {
+  var response = await http
+      .get(
+    Uri.parse(url),
+    // headers: <String, String>{
+    //   "Content-Encoding": "gzip",
+    //   "content-type": "application/json; charset=UTF-8",
+    // },
+  )
+      .catchError((error) {
     print('------------- ERROR -------------');
     print(error.toString());
   });
@@ -141,7 +148,6 @@ Future<dynamic> getProduct(String filter, String value) async {
 
 Future<void> logout() async {
   final String url = '$internalEndpoint/Auth/logout';
-  final uri = Uri.parse(url);
   final dynamic response = await http.post(
     Uri.parse(url),
     headers: <String, String>{
@@ -155,7 +161,7 @@ Future<void> logout() async {
   return jsonDecode(response.body);
 }
 
-Future<dynamic> genericDelete(String entityName,int id) async {
+Future<dynamic> genericDelete(String entityName, int id) async {
   final String url = internalEndpoint + '/$entityName/$id';
   final uri = Uri.parse(url);
   final dynamic response = await http.delete(uri, headers: <String, String>{
@@ -165,5 +171,32 @@ Future<dynamic> genericDelete(String entityName,int id) async {
     debugPrint("------------- ERROR -------------");
     debugPrint(error.toString());
   });
+  return jsonDecode(response.body);
+}
+
+
+// generic post request that takes the entity name to save
+// and access token and the needed body and make an post request
+Future<dynamic> genericPut(String entityName, dynamic body) async {
+  // getting the correct path to call
+  final String url = internalEndpoint + '/$entityName';
+  print('THE URL IS ===> $url');
+  print('THE BODY IS ===> $body');
+  // making the api call
+  var response = await http
+      .put(
+    Uri.parse(url),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: body,
+  )
+      .catchError((
+    error,
+  ) {
+    debugPrint("------------- ERROR -------------");
+    debugPrint(error.toString());
+  });
+  print('RESPONSE====> ${jsonDecode(response.body)}');
   return jsonDecode(response.body);
 }

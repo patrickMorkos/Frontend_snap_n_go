@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:snap_n_go/core/utils/Common.dart';
 import 'package:snap_n_go/domain/controllers/OpenFoodController.dart';
-import 'package:snap_n_go/view/widgets/AppBar/Appbar.dart';
 import 'package:snap_n_go/view/widgets/BarcodeScanner/barcodeScanner.dart';
 import 'package:snap_n_go/view/widgets/CustomButton/CustomButton.dart';
 import 'package:snap_n_go/view/widgets/Menu/Menu.dart';
@@ -309,7 +308,7 @@ class _ScanScreen extends State<ScanScreen> {
     return Scaffold(
       backgroundColor: Colors.orange.shade50,
       body: ListView(
-        children: [CustomAppBar(), _ScanBody(context)],
+        children: [Menu(isActive: whichBtn), _ScanBody(context)],
       ),
     );
   }

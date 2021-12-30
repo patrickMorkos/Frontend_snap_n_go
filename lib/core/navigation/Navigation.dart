@@ -1,11 +1,10 @@
 import 'package:get/get.dart';
-import 'package:snap_n_go/core/utils/Authentication.dart';
+import 'package:snap_n_go/view/screens/AddNewProductScreen.dart';
 import 'package:snap_n_go/view/screens/HomeScreen.dart';
 import 'package:snap_n_go/view/screens/LoginScreen.dart';
 import 'package:snap_n_go/view/screens/ManageStockScreen.dart';
 import 'package:snap_n_go/view/screens/RegisterScreen.dart';
 import 'package:snap_n_go/view/screens/ScanScreen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:snap_n_go/view/screens/StockProduct.dart';
 
 class Navigation {
@@ -23,6 +22,8 @@ class Navigation {
     GetPage(name: '/ManageStock', page: () => ManageStock()),
     //StockProducts screen route
     GetPage(name: '/Products', page: () => StockProducts()),
+    //AddNewProduct screen route
+    GetPage(name: '/AddProduct', page: ()=>AddNewProduct())
   ];
 
   List<GetPage<dynamic>> getNavigationList() {
